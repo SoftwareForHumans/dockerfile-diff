@@ -7,9 +7,9 @@ export const dockerfileDiff = async (dockerfile1: string, dockerfile2: string) =
   const image1 = await buildImage(dockerfile1);
   console.log(`Image with tag ${image1} created`);
   const image2 = await buildImage(dockerfile2);
-  console.log(`Image with tag ${image1} created`);
+  console.log(`Image with tag ${image2} created`);
 
-  console.log("Comparing images...");
+  console.log("Comparing images. This operation may take a few minutes...");
   const diff = dockerDiff(image1, image2);
   console.log("Comparison finished");
 
