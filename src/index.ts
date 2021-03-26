@@ -1,7 +1,14 @@
 import { buildImage, removeImage } from './containers';
 import { dockerDiff } from './diff';
+import { extractInfo } from './inspector';
 
 export const dockerfileDiff = async (dockerfile1: string, dockerfile2: string) => {
+  console.log(`Inspecting ${dockerfile1}`);
+  const dockerfile1Info = extractInfo(dockerfile1);
+
+  console.log(`Inspecting ${dockerfile2}`);
+  const dockerfile2Info = extractInfo(dockerfile2);
+
   console.log("Creating images from dockerfiles");
 
   const image1 = await buildImage(dockerfile1);
@@ -20,5 +27,9 @@ export const dockerfileDiff = async (dockerfile1: string, dockerfile2: string) =
   removeImage(image2)
   console.log(`Image with tag ${image2} removed`);
 
-  return diff;
+  return {
+    diff: diff,
+    info1: dockerfile1Info,
+    info2: dockerfile2Info
+  };
 }
