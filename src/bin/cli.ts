@@ -9,19 +9,27 @@ const dockerfileDiffCLI = async () => {
   console.log("Comparison report:");
 
   console.log("# Images");
-  console.log(`${dockerfile1}: ${report.info1.images.join(', ')}`);
-  console.log(`${dockerfile2}: ${report.info2.images.join(', ')}`);
+  console.log(`${dockerfile1}: [${report.info1.images.join(', ')}]`);
+  console.log(`${dockerfile2}: [${report.info2.images.join(', ')}]`);
 
   console.log("# Installation Steps");
-  console.log(`${dockerfile1}: ${report.info1.installationSteps.join(', ')}`);
-  console.log(`${dockerfile2}: ${report.info2.installationSteps.join(', ')}`);
+  console.log(`${dockerfile1}: [${report.info1.installationSteps.join(', ')}]`);
+  console.log(`${dockerfile2}: [${report.info2.installationSteps.join(', ')}]`);
 
   console.log("# Packages");
   report.diff.forEach((topic: any) => {
     console.log(`## ${topic.DiffType}`);
 
-    console.log(`${dockerfile1}: ${topic.Diff.Packages1}`);
-    console.log(`${dockerfile2}: ${topic.Diff.Packages1}`);
+    const packages1 = topic.Diff.Packages1.map((dep: any) => (
+      dep.Name
+    ));
+
+    const packages2 = topic.Diff.Packages2.map((dep: any) => (
+      dep.Name
+    ));
+
+    console.log(`${dockerfile1}: ${packages1}`);
+    console.log(`${dockerfile2}: ${packages2}`);
     console.log(`Info Diff: ${topic.Diff.InfoDiff}`);
   });
 
@@ -31,8 +39,8 @@ const dockerfileDiffCLI = async () => {
   console.log(`${dockerfile2}: ${report.info2.ports.join(', ')}`);
 
   console.log("# Entrypoint");
-  console.log(`${dockerfile1}: ${report.info1.entrypoint}`);
-  console.log(`${dockerfile2}: ${report.info2.entrypoint}`);
+  console.log(`${dockerfile1}: ${report.info1.entrypoint.join(" ")}`);
+  console.log(`${dockerfile2}: ${report.info2.entrypoint.join(" ")}`);
 }
 
 dockerfileDiffCLI();
