@@ -11,10 +11,12 @@ const dockerfileDiffCLI = async () => {
   console.log("# Images");
   console.log(`${dockerfile1}: [${report.info1.images.join(', ')}]`);
   console.log(`${dockerfile2}: [${report.info2.images.join(', ')}]`);
+  console.log("");
 
   console.log("# Installation Steps");
   console.log(`${dockerfile1}: [${report.info1.installationSteps.join('; ')}]`);
   console.log(`${dockerfile2}: [${report.info2.installationSteps.join('; ')}]`);
+  console.log("");
 
   console.log("# Packages");
   report.diff.forEach((topic: any) => {
@@ -30,16 +32,23 @@ const dockerfileDiffCLI = async () => {
 
     console.log(`${dockerfile1}: ${packages1}`);
     console.log(`${dockerfile2}: ${packages2}`);
-    console.log(`Info Diff: ${topic.Diff.InfoDiff}`);
+    console.log("");
+    console.log(`### Info Diff`);
+    topic.Diff.InfoDiff.forEach((diff: any) => {
+      console.log(diff);
+    });
+    console.log("");
   });
 
   console.log("# Ports");
   console.log(`${dockerfile1}: ${report.info1.ports.join(', ')}`);
   console.log(`${dockerfile2}: ${report.info2.ports.join(', ')}`);
+  console.log("");
 
   console.log("# Entrypoint");
   console.log(`${dockerfile1}: ${report.info1.entrypoint.join(" ")}`);
   console.log(`${dockerfile2}: ${report.info2.entrypoint.join(" ")}`);
+  console.log("");
 }
 
 dockerfileDiffCLI();
