@@ -25,7 +25,6 @@ export const extractInfo = (dockerfile: string) => {
       let index = i;
 
       while (cmd[cmd.length - 1] === '\\') {
-        console.log(cmd);
         index++;
         cmd = cmd.replace("\\", dockerfileLines[index].trim());
       }

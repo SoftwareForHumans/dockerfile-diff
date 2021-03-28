@@ -33,7 +33,6 @@ const dockerfileDiffCLI = async () => {
     console.log(`Info Diff: ${topic.Diff.InfoDiff}`);
   });
 
-
   console.log("# Ports");
   console.log(`${dockerfile1}: ${report.info1.ports.join(', ')}`);
   console.log(`${dockerfile2}: ${report.info2.ports.join(', ')}`);
