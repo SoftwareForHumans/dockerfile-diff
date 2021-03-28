@@ -11,13 +11,26 @@ export const extractInfo = (dockerfile: string) => {
 
   let entrypoint: any;
 
-  readDockerfile(dockerfile).forEach((line: string) => {
+  const dockerfileLines = readDockerfile(dockerfile);
+
+  for (let i = 0; i < dockerfileLines.length; i++) {
+    const line = dockerfileLines[i];
+
     if (line.includes("FROM")) {
       images.push(line.replace("FROM", "").trim());
     }
 
     if (line.includes("RUN")) {
-      installationSteps.push(line.replace("RUN", "").trim());
+      let cmd = line.replace("RUN", "").trim();
+      let index = i;
+
+      while (cmd[cmd.length - 1] === '\\') {
+        console.log(cmd);
+        index++;
+        cmd = cmd.replace("\\", dockerfileLines[index].trim());
+      }
+
+      installationSteps.push(cmd);
     }
 
 
@@ -31,7 +44,7 @@ export const extractInfo = (dockerfile: string) => {
 
       entrypoint = JSON.parse(cmdRegex[0]);
     }
-  });
+  };
 
   return {
     images: images,

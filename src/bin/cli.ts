@@ -13,12 +13,12 @@ const dockerfileDiffCLI = async () => {
   console.log(`${dockerfile2}: [${report.info2.images.join(', ')}]`);
 
   console.log("# Installation Steps");
-  console.log(`${dockerfile1}: [${report.info1.installationSteps.join(', ')}]`);
-  console.log(`${dockerfile2}: [${report.info2.installationSteps.join(', ')}]`);
+  console.log(`${dockerfile1}: [${report.info1.installationSteps.join('; ')}]`);
+  console.log(`${dockerfile2}: [${report.info2.installationSteps.join('; ')}]`);
 
   console.log("# Packages");
   report.diff.forEach((topic: any) => {
-    console.log(`## ${topic.DiffType}`);
+    console.log(`## Exclusive ${topic.DiffType} Packages`);
 
     const packages1 = topic.Diff.Packages1.map((dep: any) => (
       dep.Name
