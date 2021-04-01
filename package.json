@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "dockerode": "^3.2.1",
+    "markdown-pdf": "^10.0.0",
     "tar-fs": "^2.0.1",
     "ts-node": "^9.1.1"
   }

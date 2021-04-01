@@ -1,6 +1,7 @@
 import { buildImage, removeImage } from './containers';
 import { dockerDiff } from './diff';
 import { extractInfo } from './inspector';
+import { diffMarkdownReport } from './report';
 
 export const dockerfileDiff = async (dockerfile1: string, dockerfile2: string) => {
   console.log(`Inspecting ${dockerfile1}`);
@@ -32,4 +33,10 @@ export const dockerfileDiff = async (dockerfile1: string, dockerfile2: string) =
     info1: dockerfile1Info,
     info2: dockerfile2Info
   };
+}
+
+export const markdownDockerfileDiff = (dockerfile1: string, dockerfile2: string, report: any) => {
+  const markdownReport: string = diffMarkdownReport(dockerfile1, dockerfile1, report);
+
+  return markdownReport;
 }
