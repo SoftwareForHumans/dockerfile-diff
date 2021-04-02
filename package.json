@@ -29,14 +29,14 @@
   },
   "homepage": "https://github.com/Raidenkyu/dockerfile-diff#readme",
   "devDependencies": {
-    "@types/dockerode": "^3.2.2",
+    "@types/dockerode": "^3.2.3",
     "@types/tar-fs": "^2.0.0",
     "typescript": "^4.2.3"
   },
   "dependencies": {
     "dockerode": "^3.2.1",
     "markdown-pdf": "^10.0.0",
-    "tar-fs": "^2.0.1",
+    "tar-fs": "^2.1.1",
     "ts-node": "^9.1.1"
   }
 }
