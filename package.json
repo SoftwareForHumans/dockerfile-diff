@@ -9,7 +9,7 @@
   "scripts": {
     "start": "ts-node src/bin/cli.ts",
     "build": "tsc",
-    "install-dockerfile-diff": "npm run build && npm link && npm run setup-dockerfile-diff",
+    "install-dockerfile-diff": "npm run build && npm run setup-dockerfile-diff",
     "setup-dockerfile-diff": "sed -i '1i#!/usr/bin/env node' dist/bin/cli.js && chmod +x dist/bin/cli.js"
   },
   "repository": {
