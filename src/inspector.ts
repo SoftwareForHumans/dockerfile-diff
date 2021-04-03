@@ -17,7 +17,7 @@ export const extractInfo = (dockerfile: string) => {
     const line = dockerfileLines[i];
 
     if (line.includes("FROM")) {
-      images.push(line.replace("FROM", "").trim());
+      images.push(line.replace("FROM", "").trim().split(" ")[0]);
     }
 
     if (line.includes("RUN")) {

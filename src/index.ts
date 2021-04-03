@@ -36,7 +36,7 @@ export const dockerfileDiff = async (dockerfile1: string, dockerfile2: string) =
 }
 
 export const markdownDockerfileDiff = (dockerfile1: string, dockerfile2: string, report: any) => {
-  const markdownReport: string = diffMarkdownReport(dockerfile1, dockerfile1, report);
+  const markdownReport: string = diffMarkdownReport(dockerfile1, dockerfile2, report);
 
   return markdownReport;
 }

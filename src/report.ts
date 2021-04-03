@@ -51,24 +51,23 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
 
     markdownReport += '\n';
 
-    markdownReport += `**Version Diff**: ${topic.Diff.InfoDiff.length == 0 ? "n/a" : ""}\n`;
+    markdownReport += `**Package Diff**: ${topic.Diff.InfoDiff.length == 0 ? "n/a" : ""}\n`;
     topic.Diff.InfoDiff.forEach((diff: any) => {
-      console.log(diff);
-      markdownReport += `* ${diff.Package}`;
-      markdownReport += `\t* **${dockerfile1} Version**: ${diff.Info1[0].Version}\n`;
-      markdownReport += `\t* **${dockerfile2} Version**: ${diff.Info2[0].Version}\n`;
+      markdownReport += `* **${diff.Package}**: \n`;
+      markdownReport += `\t* **${dockerfile1}**: Version: ${diff.Info1[0].Version}, Size: ${diff.Info1[0].Size}\n`;
+      markdownReport += `\t* **${dockerfile2}**: Version: ${diff.Info2[0].Version}, Size: ${diff.Info2[0].Size}\n`;
     });
     markdownReport += '\n';
   });
 
   markdownReport += "## Ports: \n";
-  markdownReport += `**${dockerfile1}**: ${report.info1.ports.join(', ')}\n`;
-  markdownReport += `**${dockerfile2}**: ${report.info2.ports.join(', ')}\n`;
+  markdownReport += `**${dockerfile1}**: ${report.info1.ports.length === 0 ? "n/a" : report.info1.ports.join(', ')}\n`;
+  markdownReport += `**${dockerfile2}**: ${report.info2.ports.length === 0 ? "n/a" : report.info2.ports.join(', ')}\n`;
   markdownReport += '\n';
 
   markdownReport += "## Entrypoint: \n";
-  markdownReport += `**${dockerfile1}**: ${report.info1.entrypoint.join(" ")}\n`;
-  markdownReport += `**${dockerfile2}**: ${report.info2.entrypoint.join(" ")}\n`;
+  markdownReport += `**${dockerfile1}**: ${report.info1.entrypoint.length === 0 ? "n/a" : report.info1.entrypoint.join(" ")}\n`;
+  markdownReport += `**${dockerfile2}**: ${report.info2.entrypoint.length === 0 ? "n/a" : report.info2.entrypoint.join(" ")}\n`;
   markdownReport += '\n';
 
   return markdownReport;
