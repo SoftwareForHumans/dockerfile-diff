@@ -10,6 +10,8 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
     markdownReport += `* ${dep}\n`;
   });
 
+  markdownReport += "\n";
+
   markdownReport += `**${dockerfile2}**: ${report.info2.images.length == 0 ? "n/a" : ""}\n`;
 
   report.info2.images.forEach((dep: string) => {
@@ -20,15 +22,21 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
 
   markdownReport += "## Installation Steps\n";
   markdownReport += `**${dockerfile1}**: ${report.info1.installationSteps.length == 0 ? "n/a" : ""}\n`;
+  let count1 = 0;
 
   report.info1.installationSteps.forEach((step: string) => {
-    markdownReport += `* ${step}\n`;
+    count1++;
+    markdownReport += `${count1}. ${step}\n`;
   });
 
+  markdownReport += "\n";
+
   markdownReport += `**${dockerfile2}**: ${report.info2.installationSteps.length == 0 ? "n/a" : ""}\n`;
+  let count2 = 0;
 
   report.info2.installationSteps.forEach((step: string) => {
-    markdownReport += `* ${step}\n`;
+    count2++;
+    markdownReport += `${count2}. ${step}\n`;
   });
 
   markdownReport += '\n';
@@ -37,13 +45,15 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
 
   report.diff.forEach((topic: any) => {
     markdownReport += `### Exclusive ${topic.DiffType} Packages\n`;
-    markdownReport += `${dockerfile1}: ${topic.Diff.Packages1.length == 0 ? "n/a" : ""}\n`;
+    markdownReport += `**${dockerfile1}**: ${topic.Diff.Packages1.length == 0 ? "n/a" : ""}\n`;
 
     topic.Diff.Packages1.forEach((dep: any) => {
       markdownReport += `* ${dep.Name}\n`;
     });
 
-    markdownReport += `${dockerfile1}: ${topic.Diff.Packages2.length == 0 ? "n/a" : ""}\n`;
+    markdownReport += "\n";
+
+    markdownReport += `**${dockerfile2}**: ${topic.Diff.Packages2.length == 0 ? "n/a" : ""}\n`;
 
     topic.Diff.Packages2.forEach((dep: any) => {
       markdownReport += `* ${dep.Name}\n`;
@@ -60,12 +70,12 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
     markdownReport += '\n';
   });
 
-  markdownReport += "## Ports: \n";
+  markdownReport += "## Ports\n";
   markdownReport += `**${dockerfile1}**: ${report.info1.ports.length === 0 ? "n/a" : report.info1.ports.join(', ')}\n`;
   markdownReport += `**${dockerfile2}**: ${report.info2.ports.length === 0 ? "n/a" : report.info2.ports.join(', ')}\n`;
   markdownReport += '\n';
 
-  markdownReport += "## Entrypoint: \n";
+  markdownReport += "## Entrypoint\n";
   markdownReport += `**${dockerfile1}**: ${report.info1.entrypoint.length === 0 ? "n/a" : report.info1.entrypoint.join(" ")}\n`;
   markdownReport += `**${dockerfile2}**: ${report.info2.entrypoint.length === 0 ? "n/a" : report.info2.entrypoint.join(" ")}\n`;
   markdownReport += '\n';
