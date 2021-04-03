@@ -30,6 +30,7 @@
   "homepage": "https://github.com/Raidenkyu/dockerfile-diff#readme",
   "devDependencies": {
     "@types/dockerode": "^3.2.3",
+    "@types/markdown-pdf": "^9.0.0",
     "@types/tar-fs": "^2.0.0",
     "typescript": "^4.2.3"
   },

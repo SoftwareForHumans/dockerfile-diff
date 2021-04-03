@@ -6,7 +6,7 @@ const dockerfileDiffCLI = async () => {
 
   const report = await dockerfileDiff(dockerfile1, dockerfile2);
 
-  console.log(markdownDockerfileDiff(dockerfile1, dockerfile2, report));
+  await markdownDockerfileDiff(dockerfile1, dockerfile2, report);
 }
 
 dockerfileDiffCLI();
