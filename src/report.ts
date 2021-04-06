@@ -1,3 +1,28 @@
+const portsDetectionEvaluation = (ports1: Array<number>, ports2: Array<number>) => {
+  let portHits = 0;
+  let portMisses = 0;
+
+  ports1.forEach((port) => {
+    if (ports2.includes(port)) portHits++;
+  });
+
+  ports2.forEach((port) => {
+    if (!ports1.includes(port)) portMisses++;
+  });
+
+  const accuracy = (portHits === 0) ?
+    (ports1.length === 0 ? 100 : 0) 
+    : (portHits * 100 / ports1.length).toFixed(1);
+  
+  const risk = (portMisses === 0) ? 0 : (portMisses * 100 / ports2.length).toFixed(1);
+
+  return {
+    accuracy: accuracy,
+    risk: risk
+  }
+}
+
+
 export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, report: any) => {
   let markdownReport: string = "";
 
@@ -43,7 +68,16 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
 
   markdownReport += "## Packages\n";
 
+  let containerSize = 0;
+  let bloatSize = 0;
+  let diffBalance = 0;
+
   report.diff.forEach((topic: any) => {
+    if (topic.DiffType == "Size") {
+      containerSize = topic.Diff[0].Size2;
+      return;
+    }
+
     markdownReport += `### Exclusive ${topic.DiffType} Packages\n`;
     markdownReport += `**${dockerfile1}**: ${topic.Diff.Packages1.length == 0 ? "n/a" : ""}\n`;
 
@@ -56,6 +90,7 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
     markdownReport += `**${dockerfile2}**: ${topic.Diff.Packages2.length == 0 ? "n/a" : ""}\n`;
 
     topic.Diff.Packages2.forEach((dep: any) => {
+      bloatSize += dep.Size;
       markdownReport += `* ${dep.Name}\n`;
     });
 
@@ -64,15 +99,33 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
     markdownReport += `**Package Diff**: ${topic.Diff.InfoDiff.length == 0 ? "n/a" : ""}\n`;
     topic.Diff.InfoDiff.forEach((diff: any) => {
       markdownReport += `* **${diff.Package}**: \n`;
-      markdownReport += `\t* **${dockerfile1}**: Version: ${diff.Info1[0].Version}, Size: ${diff.Info1[0].Size}\n`;
-      markdownReport += `\t* **${dockerfile2}**: Version: ${diff.Info2[0].Version}, Size: ${diff.Info2[0].Size}\n`;
+
+      const size1 = diff.Info1[0].Size;
+      const size2 = diff.Info2[0].Size;
+      diffBalance += size2 - size1;
+
+      markdownReport += `\t* **${dockerfile1}**: Version: ${diff.Info1[0].Version}, Size: ${size1}\n`;
+      markdownReport += `\t* **${dockerfile2}**: Version: ${diff.Info2[0].Version}, Size: ${size2}\n`;
     });
     markdownReport += '\n';
   });
 
+  markdownReport += `### Dependencies Evaluation\n`;
+  markdownReport += `**Bloat Ratio**: ${(bloatSize * 100 / containerSize).toFixed(1)}%\n`;
+  markdownReport += `**Package Diff Balance**: ${diffBalance} B\n`;
+
   markdownReport += "## Ports\n";
-  markdownReport += `**${dockerfile1}**: ${report.info1.ports.length === 0 ? "n/a" : report.info1.ports.join(', ')}\n`;
-  markdownReport += `**${dockerfile2}**: ${report.info2.ports.length === 0 ? "n/a" : report.info2.ports.join(', ')}\n`;
+
+  const ports1 = report.info1.ports;
+  const ports2 = report.info2.ports;
+
+  markdownReport += `**${dockerfile1}**: ${ports1.length === 0 ? "n/a" : ports1.join(', ')}\n`;
+  markdownReport += `**${dockerfile2}**: ${ports2.length === 0 ? "n/a" : ports2.join(', ')}\n`;
+
+  const portsEval = portsDetectionEvaluation(ports1, ports2);
+
+  markdownReport += `**Accuracy Ratio**: ${portsEval.accuracy}%\n`;
+  markdownReport += `**Risk Ratio**: ${portsEval.risk}%\n`;
   markdownReport += '\n';
 
   markdownReport += "## Entrypoint\n";
