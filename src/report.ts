@@ -1,3 +1,5 @@
+import { compareTwoStrings } from 'string-similarity';
+
 const portsDetectionEvaluation = (ports1: Array<number>, ports2: Array<number>) => {
   let portHits = 0;
   let portMisses = 0;
@@ -11,9 +13,9 @@ const portsDetectionEvaluation = (ports1: Array<number>, ports2: Array<number>) 
   });
 
   const accuracy = (portHits === 0) ?
-    (ports1.length === 0 ? 100 : 0) 
+    (ports1.length === 0 ? 100 : 0)
     : (portHits * 100 / ports1.length).toFixed(1);
-  
+
   const risk = (portMisses === 0) ? 0 : (portMisses * 100 / ports2.length).toFixed(1);
 
   return {
@@ -129,8 +131,14 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
   markdownReport += '\n';
 
   markdownReport += "## Entrypoint\n";
-  markdownReport += `**${dockerfile1}**: ${report.info1.entrypoint.length === 0 ? "n/a" : report.info1.entrypoint.join(" ")}\n`;
-  markdownReport += `**${dockerfile2}**: ${report.info2.entrypoint.length === 0 ? "n/a" : report.info2.entrypoint.join(" ")}\n`;
+
+  const entrypoint1 = report.info1.entrypoint.join(" ");
+  const entrypoint2 = report.info2.entrypoint.join(" ");
+  const similarity = (compareTwoStrings(entrypoint1, entrypoint2) * 100).toFixed(1);
+
+  markdownReport += `**${dockerfile1}**: ${report.info1.entrypoint.length === 0 ? "n/a" : entrypoint1}\n`;
+  markdownReport += `**${dockerfile2}**: ${report.info2.entrypoint.length === 0 ? "n/a" : entrypoint2}\n`;
+  markdownReport += `**Similarity**: ${similarity}%\n`;
   markdownReport += '\n';
 
   return markdownReport;
