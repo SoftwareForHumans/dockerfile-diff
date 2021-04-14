@@ -39,9 +39,10 @@ export const extractInfo = (dockerfile: string) => {
 
     if (line.includes("ENTRYPOINT") || line.includes("CMD")) {
       const cmdRegex = RegExp('\\[.*?\\]').exec(line);
-      if (cmdRegex == null) throw new Error('Dockerfile has no enrypoint');
+      const lineWords = line.split(" ");
+      //if (cmdRegex == null) throw new Error('Dockerfile has no entrypoint');
 
-      entrypoint = JSON.parse(cmdRegex[0]);
+      const entrypoint = (cmdRegex == null) ? lineWords.slice(1) : JSON.parse(cmdRegex[0]);
     }
   };
 

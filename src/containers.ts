@@ -22,9 +22,13 @@ export const buildImage = (dockerfile: string) => new Promise<string>((resolve, 
       });
 
       stream.on('data', (dataBuffer: Buffer) => {
-        const msg = JSON.parse(dataBuffer.toString())['stream'].replace("\n", "");
-        console.log(`Docker Message - ${msg}`);
-
+        try {
+          const msg = JSON.parse(dataBuffer.toString())['stream'].replace("\n", "");
+          console.log(`Docker Message - ${msg}`);
+        }
+        catch (_e) {
+          console.log(`Container Stream - ${dataBuffer.toString()}`);
+        }
       });
 
       stream.on('end', () => {
