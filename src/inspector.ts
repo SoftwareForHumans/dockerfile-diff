@@ -42,7 +42,7 @@ export const extractInfo = (dockerfile: string) => {
       const lineWords = line.split(" ");
       //if (cmdRegex == null) throw new Error('Dockerfile has no entrypoint');
 
-      const entrypoint = (cmdRegex == null) ? lineWords.slice(1) : JSON.parse(cmdRegex[0]);
+      entrypoint = (cmdRegex == null) ? lineWords.slice(1) : JSON.parse(cmdRegex[0]);
     }
   };
 
