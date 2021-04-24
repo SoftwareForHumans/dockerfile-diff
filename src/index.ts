@@ -5,6 +5,8 @@ import { dockerDiff } from './diff';
 import { extractInfo } from './inspector';
 import { diffMarkdownReport } from './report';
 
+import ComparisonData from './lib/ComparisonData';
+
 const DIFF_REPORT_NAME = "diff-report.pdf";
 
 export const dockerfileDiff = async (dockerfile1: string, dockerfile2: string) => {
@@ -39,12 +41,12 @@ export const dockerfileDiff = async (dockerfile1: string, dockerfile2: string) =
   };
 }
 
-export const markdownDockerfileDiff = (dockerfile1: string, dockerfile2: string, report: any) => new Promise(
+export const markdownDockerfileDiff = (dockerfile1: string, dockerfile2: string, report: any) => new Promise<ComparisonData>(
   (resolve, _reject) => {
-  const markdownReport: string = diffMarkdownReport(dockerfile1, dockerfile2, report);
+    const comparisonReport = diffMarkdownReport(dockerfile1, dockerfile2, report);
 
-  markdownpdf().from.string(markdownReport).to(DIFF_REPORT_NAME, () => {
-    console.log(`Comparison report successfully generated with name ${DIFF_REPORT_NAME}`);
-    resolve(markdownReport);
+    markdownpdf().from.string(comparisonReport.markdownReport).to(DIFF_REPORT_NAME, () => {
+      console.log(`Comparison report successfully generated with name ${DIFF_REPORT_NAME}`);
+      resolve(comparisonReport.comparisonData);
+    });
   });
-});

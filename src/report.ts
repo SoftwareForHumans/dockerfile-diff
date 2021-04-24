@@ -1,3 +1,5 @@
+import path from 'path';
+
 import { compareTwoStrings } from 'string-similarity';
 
 const portsDetectionEvaluation = (ports1: Array<number>, ports2: Array<number>) => {
@@ -19,14 +21,23 @@ const portsDetectionEvaluation = (ports1: Array<number>, ports2: Array<number>) 
   const risk = (portMisses === 0) ? 0 : (portMisses * 100 / ports2.length).toFixed(1);
 
   return {
-    accuracy: accuracy,
-    risk: risk
+    accuracy: accuracy.toString(),
+    risk: risk.toString()
   }
 }
 
 
 export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, report: any) => {
   let markdownReport: string = "";
+  const comparisonData = {
+    name: path.basename(path.resolve(process.cwd())),
+    bloatRatio: "0",
+    missedDependencies: "0",
+    balance: 0,
+    ports: "0",
+    risk: "0",
+    entrypoint: "0"
+  };
 
   markdownReport += "# Comparison report\n";
 
@@ -70,12 +81,15 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
 
   markdownReport += "## Packages\n";
 
+  let totalSize = 0;
   let containerSize = 0;
+  let packagesSize = 0;
   let bloatSize = 0;
   let diffBalance = 0;
 
   report.diff.forEach((topic: any) => {
     if (topic.DiffType == "Size") {
+      totalSize = topic.Diff[0].Size1;
       containerSize = topic.Diff[0].Size2;
       return;
     }
@@ -84,6 +98,7 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
     markdownReport += `**${dockerfile1}**: ${topic.Diff.Packages1.length == 0 ? "n/a" : ""}\n`;
 
     topic.Diff.Packages1.forEach((dep: any) => {
+      packagesSize += dep.Size;
       markdownReport += `* ${dep.Name}\n`;
     });
 
@@ -113,7 +128,13 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
   });
 
   markdownReport += `### Dependencies Evaluation\n`;
-  markdownReport += `**Bloat Ratio**: ${(bloatSize * 100 / containerSize).toFixed(1)}%\n`;
+
+  comparisonData.bloatRatio = (bloatSize * 100 / containerSize).toFixed(1);
+  comparisonData.missedDependencies = (packagesSize * 100 / totalSize).toFixed(1);
+  comparisonData.balance = diffBalance;
+
+  markdownReport += `**Bloat Ratio**: ${comparisonData.bloatRatio}%\n`;
+  markdownReport += `**Missed Dependencies Ratio**: ${comparisonData.missedDependencies}%\n`;
   markdownReport += `**Package Diff Balance**: ${diffBalance} B\n`;
 
   markdownReport += "## Ports\n";
@@ -125,6 +146,8 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
   markdownReport += `**${dockerfile2}**: ${ports2.length === 0 ? "n/a" : ports2.join(', ')}\n`;
 
   const portsEval = portsDetectionEvaluation(ports1, ports2);
+  comparisonData.ports = portsEval.accuracy;
+  comparisonData.risk = portsEval.risk;
 
   markdownReport += `**Accuracy Ratio**: ${portsEval.accuracy}%\n`;
   markdownReport += `**Risk Ratio**: ${portsEval.risk}%\n`;
@@ -135,11 +158,15 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
   const entrypoint1 = report.info1.entrypoint.join(" ");
   const entrypoint2 = report.info2.entrypoint.join(" ");
   const similarity = (compareTwoStrings(entrypoint1, entrypoint2) * 100).toFixed(1);
+  comparisonData.entrypoint = similarity;
 
   markdownReport += `**${dockerfile1}**: ${report.info1.entrypoint.length === 0 ? "n/a" : entrypoint1}\n`;
   markdownReport += `**${dockerfile2}**: ${report.info2.entrypoint.length === 0 ? "n/a" : entrypoint2}\n`;
   markdownReport += `**Similarity**: ${similarity}%\n`;
   markdownReport += '\n';
 
-  return markdownReport;
+  return {
+    markdownReport: markdownReport,
+    comparisonData: comparisonData
+  };
 }
