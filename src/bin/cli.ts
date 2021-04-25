@@ -1,8 +1,20 @@
-import { dockerfileDiff, markdownDockerfileDiff } from '../index';
 import storage, { init } from 'node-persist';
+
+import { dockerfileDiff, markdownDockerfileDiff } from '../index';
+import ComparisonData from '../lib/ComparisonData';
+import { printDatabase } from '../csv';
 
 const dockerfileDiffCLI = async () => {
   const initStorage = storage.init();
+
+
+  if (process.argv[2] == "print") {
+    await initStorage;
+    const items = await storage.values();
+    await printDatabase(items);
+    console.log("Database printed");
+    return;
+  }
 
   const dockerfile1 = process.argv[2];
   const dockerfile2 = process.argv[3];
