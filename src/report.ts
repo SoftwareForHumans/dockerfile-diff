@@ -146,10 +146,10 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
   markdownReport += `**${dockerfile2}**: ${ports2.length === 0 ? "n/a" : ports2.join(', ')}\n`;
 
   const portsEval = portsDetectionEvaluation(ports1, ports2);
-  comparisonData.ports = portsEval.accuracy;
+  comparisonData.ports = (ports1.length !== 0) ? portsEval.accuracy : "null";
   comparisonData.risk = portsEval.risk;
 
-  markdownReport += `**Accuracy Ratio**: ${portsEval.accuracy}%\n`;
+  markdownReport += `**Accuracy Ratio**: ${(portsEval.accuracy === "null") ? "not applicable" : portsEval.accuracy}%\n`;
   markdownReport += `**Risk Ratio**: ${portsEval.risk}%\n`;
   markdownReport += '\n';
 

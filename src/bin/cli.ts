@@ -1,11 +1,11 @@
-import storage, { init } from 'node-persist';
+import storage from 'node-persist';
+import path from 'path';
 
 import { dockerfileDiff, markdownDockerfileDiff } from '../index';
-import ComparisonData from '../lib/ComparisonData';
 import { printDatabase } from '../csv';
 
 const dockerfileDiffCLI = async () => {
-  const initStorage = storage.init();
+  const initStorage = storage.init({ dir: path.join(__dirname, '../.diff') });
 
 
   if (process.argv[2] == "print") {
