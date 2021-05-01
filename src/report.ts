@@ -117,12 +117,15 @@ export const diffMarkdownReport = (dockerfile1: string, dockerfile2: string, rep
     topic.Diff.InfoDiff.forEach((diff: any) => {
       markdownReport += `* **${diff.Package}**: \n`;
 
-      const size1 = diff.Info1[0].Size;
-      const size2 = diff.Info2[0].Size;
+      const info1 = (diff.Info1[0] == undefined) ? diff.Info1 : diff.Info1[0];
+      const info2 = (diff.Info2[0] == undefined) ? diff.Info2 : diff.Info2[0];
+
+      const size1 = info1.Size;
+      const size2 = info2.Size;
       diffBalance += size2 - size1;
 
-      markdownReport += `\t* **${dockerfile1}**: Version: ${diff.Info1[0].Version}, Size: ${size1}\n`;
-      markdownReport += `\t* **${dockerfile2}**: Version: ${diff.Info2[0].Version}, Size: ${size2}\n`;
+      markdownReport += `\t* **${dockerfile1}**: Version: ${info1.Version}, Size: ${size1}\n`;
+      markdownReport += `\t* **${dockerfile2}**: Version: ${info2.Version}, Size: ${size2}\n`;
     });
     markdownReport += '\n';
   });
