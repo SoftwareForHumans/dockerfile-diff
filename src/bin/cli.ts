@@ -16,8 +16,8 @@ const dockerfileDiffCLI = async () => {
     return;
   }
 
-  const dockerfile1 = process.argv[2];
-  const dockerfile2 = process.argv[3];
+  const dockerfile1 = process.argv[2] || "Dockerfile";
+  const dockerfile2 = process.argv[3] || "Dockerfile.hermit";
 
   const report = await dockerfileDiff(dockerfile1, dockerfile2);
 
