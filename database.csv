@@ -1,0 +1,13 @@
+name;bloatRatio;missedDependencies;balance;ports;risk;entrypoint
+cowait;0.0;36.5;3771;null;0;100.0
+newTrackon;93.6;17.0;3635;100.0;0;100.0
+sherlock;72.5;42.9;877454;null;0;100.0
+RSSHub;27.1;1.1;18432;0;0;70.6
+gitlab-semantic-versioning;4.0;47.4;8988389;null;0;100.0
+findmeaflat;88.8;0.0;0;null;0;0.0
+bookdb;0.0;78.4;3905;null;100.0;100.0
+auto-generate-changelog;0.0;47.1;3373878;null;0;100.0
+frontend;84.8;0.0;8867418;100.0;0;100.0
+juice-shop;53.4;0.0;0;100.0;0;100.0
+juice-shop-ctf;86.8;0.0;0;null;0;100.0
+cookiecutter-flask;0.0;8.2;772122;null;100.0;100.0
