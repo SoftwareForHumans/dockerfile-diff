@@ -1,6 +1,7 @@
 name;bloatRatio;missedDependencies;balance;ports;risk;entrypoint
 athena;0.0;0.0;0;null;0;70.6
 cowait;0.0;36.5;3771;null;0;100.0
+vulcan;0.0;0.0;0;null;0;70.6
 newTrackon;93.6;17.0;3635;100.0;0;100.0
 sherlock;72.5;42.9;877454;null;0;100.0
 k8s-sidecar;92.2;38.0;0;null;0;100.0
@@ -20,6 +21,8 @@ immer;36.4;22.6;30023359;100.0;0;100.0
 locust;0.0;78.5;0;0;100.0;100.0
 tracker;84.8;0.0;8867418;100.0;0;100.0
 ranger;72.7;12.1;0;null;0;100.0
+hyperion;0.0;0.0;0;null;0;70.6
+hermes;0.0;0.0;0;null;0;70.6
 juice-shop;53.4;0.0;0;100.0;0;100.0
 juice-shop-ctf;86.8;0.0;0;null;0;100.0
 dockercron;68.5;40.6;40908687;0;0;0.0
